@@ -4,28 +4,98 @@
     <div class="thumb">
       <div class="custom-control custom-checkbox">
         <!-- 复选框 -->
-        <input type="checkbox" class="custom-control-input" id="cb1" :checked="true" />
-        <label class="custom-control-label" for="cb1">
+        <input type="checkbox" class="custom-control-input" :id="id" :checked="state" @change="stateChange"/>
+        <label class="custom-control-label" :for="id">
           <!-- 商品的缩略图 -->
-          <img src="../../assets/logo.png" alt="" />
+          <img :src=pic alt="" />
         </label>
       </div>
     </div>
     <!-- 右侧信息区域 -->
     <div class="goods-info">
       <!-- 商品标题 -->
-      <h6 class="goods-title">商品名称商品名称商品名称商品名称</h6>
+      <h6 class="goods-title">{{title}}</h6>
       <div class="goods-info-bottom">
         <!-- 商品价格 -->
-        <span class="goods-price">￥0</span>
+        <span class="goods-price">￥{{price}}</span>
         <!-- 商品的数量 -->
       </div>
     </div>
+    <counter :goods_count = "count" :goods_id = "id"></counter>
   </div>
+  
 </template>
 
 <script>
-export default {}
+import Counter from '../Counter/Counter.vue';
+export default {
+  data(){
+    return{
+      // itemInfo:{
+      //   item_price: this.price,
+      //   countData:this.count,
+      //   stateData: this.state,
+      //   idData: this.id
+      // },
+    }
+  },
+  props:{
+    price:{
+      default: 0,
+      type: Number
+    },
+    title:{
+      default:'',
+      type: String
+    },
+    pic:{
+      default: '',
+      type: String
+    },
+    state:{
+      default: true,
+      type: Boolean
+    },
+    count:{
+      default: 0,
+      type: Number
+    },
+    id:{
+      required: true,
+      type: Number
+    }
+    // item: {
+    //   default:{},
+    //   type: Object
+    // }
+  },
+  components:{Counter},
+  methods:{
+    stateChange(e){
+      this.$emit('stateChange' ,{state:e.target.checked,id: this.id})
+    },
+    getNewCount(val){
+
+    }
+  //   getNewCount(val){
+  //     this.send()
+  //     return this.itemInfo.stateData = val
+  //   },
+  //   send(){
+  //     bus.$emit('share',this.itemInfo)
+  //   }
+  // },
+  // created(){
+  //   bus.$on('checkGoods', val=>{
+  //     this.itemInfo.stateData = val
+  //   })
+  // },
+  // beforeUpdate(){
+  //   this.send()
+  // }
+  }
+}
+
 </script>
 
 <style lang="less" scoped>
@@ -53,6 +123,13 @@ export default {}
     .goods-title {
       font-weight: bold;
       font-size: 12px;
+      text-overflow: -o-ellipsis-lastline;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
     }
     .goods-info-bottom {
       display: flex;
